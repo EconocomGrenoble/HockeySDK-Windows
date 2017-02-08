@@ -18,9 +18,11 @@
 
   <files>
     <!-- HockeySDK -->
-    <file src="..\Src\Kit.WPF45\Microsoft.HockeyApp.Kit.*" target="lib\net45" />
+    <file src="..\Src\Kit.Core45\Microsoft.HockeyApp.Core45.dll" target="lib\portable-net45+win8+wp8+wpa81+win81+uap10.0" />
+    <file src="..\Src\Kit.Core45\Microsoft.HockeyApp.Core45.XML" target="lib\portable-net45+win8+wp8+wpa81+win81+uap10.0" />
 
     <!-- Application Insights -->
-    <file src="..\Src\Kit.WPF45\Microsoft.HockeyApp.*" target="lib\net45" />
+    <file src="..\Src\Kit.WPF45\bin\Release\Microsoft.HockeyApp.Kit.dll" target="lib\net45" />
+    <file src="..\Src\Kit.WPF45\bin\Release\Microsoft.HockeyApp.Kit.XML" target="lib\net45" />
   </files>
 </package>
