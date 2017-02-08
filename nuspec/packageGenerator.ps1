@@ -11,7 +11,7 @@ $locationNuspec
 	
 Set-Location -Path $locationNuspec
 
-$strPath = $location + '\Src\Kit.Core45\bin\Release\Kit.Core45.dll'
+$strPath = $location + '\Src\Kit.Core45\bin\Release\Microsoft.HockeyApp.Core45.dll'
 
 $VersionInfos = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($strPath)
 $ProductVersion = $VersionInfos.ProductVersion
