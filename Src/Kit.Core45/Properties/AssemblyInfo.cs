@@ -7,6 +7,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © Microsoft Corporation. All Rights Reserved.")]
 
 
-[assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit.UWP.Tests" + AssemblyInfo.PublicKey)]
-[assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit.Core45.Tests" + AssemblyInfo.PublicKey)]
-[assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit" + AssemblyInfo.PublicKey)]
+[assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit.UWP.Tests")]
+[assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit.Core45.Tests")]
+[assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit")]

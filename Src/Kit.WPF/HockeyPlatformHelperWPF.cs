@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +19,15 @@ namespace Microsoft.HockeyApp
     /// <summary>
     /// HockeyPlatformHelperWPF class.
     /// </summary>
-    public class HockeyPlatformHelperWPF : IHockeyPlatformHelper
+    public class HockeyPlatformHelperWpf : IHockeyPlatformHelper
     {
 
         private const string FILE_PREFIX = "HA__SETTING_";
-        IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+        readonly IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
 
         private string PostfixWithUniqueAppString(string folderName, bool noDirectorySeparator = false)
         {
-            return ((folderName ?? "") + (noDirectorySeparator ? "" : "" + Path.DirectorySeparatorChar) + HockeyClientWPFExtensions.AppUniqueFolderName);
+            return ((folderName ?? "") + (noDirectorySeparator ? "" : "" + Path.DirectorySeparatorChar) + HockeyClientWpfExtensions.AppUniqueFolderName);
         }
 
         /// <summary>
@@ -293,37 +294,28 @@ namespace Microsoft.HockeyApp
         {
             get { return HockeyConstants.USER_AGENT_STRING; }
         }
-
-        private string _productID = null;
-
+        
         /// <summary>
         /// Gets or sets product ID.
         /// </summary>
-        public string ProductID
-        {
-            get { return _productID; }
-            set { _productID = value; }
-        }
+        public string ProductID { get; set; }
         
-
         /// <summary>
         /// Gets manufacturer.
         /// </summary>
         public string Manufacturer
         {
-            get { 
-                //TODO System.Management referenzieren !?
-                /*
-                Type.GetType
+            get {
                 ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
-            //collection to store all management objects
-            ManagementObjectCollection moc = mc.GetInstances();
-            if (moc.Count != 0)
-            {
-                foreach (ManagementObject mo in mc.GetInstances())
+                //collection to store all management objects
+                ManagementObjectCollection moc = mc.GetInstances();
+                if (moc.Count != 0)
                 {
-                 mo["Manufacturer"].ToString()
-                */
+                    foreach (var mo in mc.GetInstances())
+                    {
+                        return mo["Manufacturer"].ToString();
+                    }
+                }
                 return null;
             }
         }

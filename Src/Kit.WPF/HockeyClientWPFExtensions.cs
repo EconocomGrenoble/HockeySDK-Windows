@@ -1,14 +1,11 @@
-﻿using Microsoft.HockeyApp.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Microsoft.HockeyApp.Extensibility;
 using Microsoft.HockeyApp.Services;
 
 namespace Microsoft.HockeyApp
@@ -16,7 +13,7 @@ namespace Microsoft.HockeyApp
     /// <summary>
     /// HockeyClientWPFExtensions class.
     /// </summary>
-    public static class HockeyClientWPFExtensions
+    public static class HockeyClientWpfExtensions
     {
         private static IUpdateManager _updateManager = null;
 
@@ -42,21 +39,28 @@ namespace Microsoft.HockeyApp
         /// <param name="this">This object.</param>
         /// <param name="identifier">Identifier.</param>
         /// <returns>HockeyClient configurable.</returns>
-        public static IHockeyClientConfigurable Configure(this IHockeyClient @this, string identifier)
+        public static IHockeyClientConfigurable Configure(this IHockeyClient @this, string identifier, TelemetryConfiguration configuration = null)
         {
             if (@this.AsInternal().TestAndSetIsConfigured())
             {
                 return @this as IHockeyClientConfigurable;
             }
+            
+            if (configuration == null)
+            {
+                configuration = new TelemetryConfiguration();
+            }
 
             @this.AsInternal().AppIdentifier = identifier;
-            @this.AsInternal().PlatformHelper = new HockeyPlatformHelperWPF();
+            @this.AsInternal().PlatformHelper = new HockeyPlatformHelperWpf();
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             ServiceLocator.AddService<IPlatformService>(new PlatformService());
             TelemetryConfiguration.Active.InstrumentationKey = identifier;
-            
+
+            WindowsAppInitializer.InitializeAsync(identifier, configuration);
+
             return (IHockeyClientConfigurable)@this;
         }
 
