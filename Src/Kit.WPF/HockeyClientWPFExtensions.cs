@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.HockeyApp.Services;
+using Microsoft.HockeyApp.Extensibility.Windows;
 
 namespace Microsoft.HockeyApp
 {
@@ -41,32 +42,37 @@ namespace Microsoft.HockeyApp
         /// <returns>HockeyClient configurable.</returns>
         public static IHockeyClientConfigurable Configure(this IHockeyClient @this, string identifier, TelemetryConfiguration configuration = null)
         {
-            if (@this.AsInternal().TestAndSetIsConfigured())
-            {
-                return @this as IHockeyClientConfigurable;
-            }
-            
-            if (configuration == null)
-            {
-                configuration = new TelemetryConfiguration();
-            }
+            var appId = Guid.Parse(identifier);
 
-            @this.AsInternal().AppIdentifier = identifier;
-            @this.AsInternal().PlatformHelper = new HockeyPlatformHelperWpf();
+            var applicationService = new ApplicationService();
+            var deviceService = new DeviceService();
+            var platformHelper = new HockeyPlatformHelperWPF(applicationService, deviceService);
+
+            @this.AsInternal().AppIdentifier = appId.ToString("N");
+            @this.AsInternal().PlatformHelper = platformHelper;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-            ServiceLocator.AddService<IPlatformService>(new PlatformService());
-            TelemetryConfiguration.Active.InstrumentationKey = identifier;
 
-            WindowsAppInitializer.InitializeAsync(identifier, configuration);
+            ServiceLocator.AddService<IPlatformService>(new PlatformService());
+            ServiceLocator.AddService<IApplicationService>(applicationService);
+            ServiceLocator.AddService<IDeviceService>(deviceService);
+            ServiceLocator.AddService<BaseStorageService>(new StorageService());
+            ServiceLocator.AddService<IUnhandledExceptionTelemetryModule>(new UnhandledExceptionTelemetryModule());
+
+            TelemetryConfiguration.Active.InstrumentationKey = appId.ToString("D");
+
+            WindowsAppInitializer
+                .InitializeAsync(appId.ToString("D"), TelemetryConfiguration.Active)
+                .ContinueWith(task => HockeyClient.Current.AsInternal().HandleInternalUnhandledException(task.Exception),
+                    TaskContinuationOptions.OnlyOnFaulted);
 
             return (IHockeyClientConfigurable)@this;
         }
 
-        private static Action<UnhandledExceptionEventArgs> customUnhandledExceptionAction;
-        private static Action<UnobservedTaskExceptionEventArgs> customUnobservedTaskExceptionAction;
-        private static Action<DispatcherUnhandledExceptionEventArgs> customDispatcherUnhandledExceptionAction;
+        internal static Action<UnhandledExceptionEventArgs> customUnhandledExceptionAction;
+        internal static Action<UnobservedTaskExceptionEventArgs> customUnobservedTaskExceptionAction;
+        internal static Action<DispatcherUnhandledExceptionEventArgs> customDispatcherUnhandledExceptionAction;
 
         /// <summary>
         /// Adds the handler for UnobservedTaskExceptions
@@ -271,6 +277,23 @@ namespace Microsoft.HockeyApp
         #endregion
 
         #region Helper
+
+        private static string _appIdHash = null;
+
+        /// <summary>
+        /// Gets the AppId hash.
+        /// </summary>
+        public static string AppIdHash
+        {
+            get
+            {
+                if (_appIdHash == null)
+                {
+                    _appIdHash = GetMD5Hash(HockeyClient.Current.AsInternal().AppIdentifier);
+                }
+                return _appIdHash;
+            }
+        }
 
         private static string _appUniqueFolderName = null;
 
