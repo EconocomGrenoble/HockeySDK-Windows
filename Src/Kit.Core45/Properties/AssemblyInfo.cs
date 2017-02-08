@@ -10,3 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit.UWP.Tests")]
 [assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit.Core45.Tests")]
 [assembly: InternalsVisibleTo("Microsoft.HockeyApp.Kit")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyInformationalVersion("1.0.0.0")]
+
