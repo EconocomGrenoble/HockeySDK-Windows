@@ -186,7 +186,7 @@ namespace Microsoft.HockeyApp.Model
             get
             {
                 var partsDict = new Dictionary<string, string>();
-                if (!String.IsNullOrWhiteSpace(this.Text)) { partsDict.Add("text", this.Text.Replace("\r", "\n")); }
+                if (!String.IsNullOrWhiteSpace(this.Text)) { partsDict.Add("text", this.Text.Replace("\r", "\n").Replace("&", "%26")); }
                 if (!String.IsNullOrWhiteSpace(this.Name)) { partsDict.Add("name", this.Name); }
                 if (!String.IsNullOrWhiteSpace(this.Email)) { partsDict.Add("email", this.Email); }
                 if (!String.IsNullOrWhiteSpace(this.Subject)) { partsDict.Add("subject", this.Subject); }
