@@ -38,11 +38,14 @@ namespace Microsoft.HockeyApp.Services
         /// </summary>
         public void Init()
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            if (Application.Current != null)
             {
-                Application.Current.Exit -= Current_Exit;
-                Application.Current.Exit += Current_Exit;
-            }));
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Application.Current.Exit -= Current_Exit;
+                    Application.Current.Exit += Current_Exit;
+                }));
+            }
         }
 
         /// <summary>
@@ -129,7 +132,7 @@ namespace Microsoft.HockeyApp.Services
         {
             if (applicationId == null)
             {
-                applicationId = Application.Current.GetType().Namespace;
+                applicationId = Application.Current != null ? Application.Current.GetType().Namespace : "";
             }
             return applicationId;
         }

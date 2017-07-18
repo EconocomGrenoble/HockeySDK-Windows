@@ -52,7 +52,9 @@ namespace Microsoft.HockeyApp
             @this.AsInternal().PlatformHelper = platformHelper;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+
+            if (Application.Current != null)
+                Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
 
             ServiceLocator.AddService<IPlatformService>(new PlatformService());
             ServiceLocator.AddService<IApplicationService>(applicationService);
