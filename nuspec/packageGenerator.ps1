@@ -11,6 +11,9 @@ $locationNuspec
 	
 Set-Location -Path $locationNuspec
 
+write-host "Update the nuget.exe file" -foreground "DarkGray"
+.\NuGet update -self
+
 $strPath = $location + '\Src\Kit.Core45\bin\Release\Microsoft.HockeyApp.Core45.dll'
 
 $VersionInfos = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($strPath)
