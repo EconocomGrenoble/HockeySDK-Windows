@@ -37,6 +37,12 @@
                 configuration = new TelemetryConfiguration();
             }
 
+            configuration.TelemetryChannel = new PersistenceChannel();
+            if (!string.IsNullOrEmpty(configuration.EndpointAddress))
+            {
+                configuration.TelemetryChannel.EndpointAddress = configuration.EndpointAddress;
+            }
+
             configuration.InstrumentationKey = instrumentationKey;
             TelemetryConfiguration.Active = configuration;
             return Task.Delay(TimeSpan.FromSeconds(1)).ContinueWith(t => Initalize());
