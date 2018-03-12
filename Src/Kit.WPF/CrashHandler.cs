@@ -22,7 +22,7 @@ namespace Microsoft.HockeyApp
             this._descriptionLoader = descriptionLoader;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            if (keepRunning)
+            if (keepRunning && Application.Current != null)
             {
                 Application.Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             }
@@ -67,7 +67,7 @@ namespace Microsoft.HockeyApp
 
                 CrashLogInformation logInfo = new CrashLogInformation()
                 {
-                    PackageName = Application.Current.GetType().Namespace,
+                    PackageName = Application.Current != null ? Application.Current.GetType().Namespace : "",
                     Version = HockeyClient.Current.AsInternal().VersionInfo,
                     OperatingSystem = Environment.OSVersion.Platform.ToString(),
                     Windows = Environment.OSVersion.Version.ToString() + Environment.OSVersion.ServicePack,

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Unofficial.HockeySDK.Core</id>
+    <version>{BuildNumberVersion}</version>
+    <authors>MACK Mathieu</authors>
+    <owners>MACK Mathieu</owners>
+    <licenseUrl>https://github.com/mathieumack/HockeySDK-Windows/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/mathieumack/HockeySDK-Windows</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Unofficial HockeyApp core library. This package is a dependent package for all other HockeyApp packages. Please install the platform specific package for the best experience.</description>
+    <language>en-US</language>
+    <releaseNotes>For the release notes please follow https://www.hockeyapp.net/blog</releaseNotes>
+    <tags>HockeyApp; Windows; Crash reports; reporting; feedback; Telemetry; Analytics</tags>
+    <dependencies>
+      <!--
+      <group targetFramework="portable-net40+sl5">
+        <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+      </group>
+      -->
+      <group targetFramework="portable-net45+win8+wp8+wpa81+uap10.0">
+        
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- Hockey SDK -->
+    <file src="..\Src\Kit.Core45\bin\Release\Microsoft.HockeyApp.Core45.dll" target="lib\portable-net45+win8+wp8+wpa81+win81+uap10.0" />
+    <file src="..\Src\Kit.Core45\bin\Release\Microsoft.HockeyApp.Core45.XML" target="lib\portable-net45+win8+wp8+wpa81+win81+uap10.0" />
+  </files>
+</package>

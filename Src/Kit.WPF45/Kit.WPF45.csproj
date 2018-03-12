@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.props" Condition="Exists('..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.props')" />
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), 'HockeyApp.props'))\HockeyApp.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -16,13 +14,20 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>bin\Debug\Microsoft.HockeyApp.Kit.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>bin\Release\Microsoft.HockeyApp.Kit.XML</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,8 +73,18 @@
     <Compile Include="..\Kit.WPF\UpdateManager.cs">
       <Link>UpdateManager.cs</Link>
     </Compile>
+    <Compile Include="Device\ChassisType.cs" />
+    <Compile Include="Device\DeviceService.cs" />
+    <Compile Include="Device\WmiService.cs" />
+    <Compile Include="Extensibility\NativeMethods.cs" />
+    <Compile Include="Extensibility\PEImageReader.cs" />
+    <Compile Include="Extensibility\PersistentDictionary.cs" />
+    <Compile Include="Extensions\StackFrameExtensions.cs" />
     <Compile Include="RemoveEventSource.cs" />
+    <Compile Include="Services\ApplicationService.cs" />
     <Compile Include="Services\PlatformService.cs" />
+    <Compile Include="Services\StorageService.cs" />
+    <Compile Include="Services\UnhandledExceptionTelemetryModule.cs" />
     <Compile Include="_NamespaceDoc.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,8 +116,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.props'))" />
+    <Error Condition="!Exists('..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets" Condition="Exists('..\..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets')" />
+  <Import Project="..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets" Condition="Exists('..\..\packages\MicroBuild.Core.0.1.1\build\MicroBuild.Core.targets')" />
 </Project>

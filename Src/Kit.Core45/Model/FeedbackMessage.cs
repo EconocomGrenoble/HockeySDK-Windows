@@ -98,7 +98,7 @@ namespace Microsoft.HockeyApp.Model
         {
             get
             {
-                return this.attachments != null ? this.attachments.Cast<IFeedbackAttachment>() : new List<IFeedbackAttachment>();
+                return attachments != null ? attachments.Cast<IFeedbackAttachment>() : new List<IFeedbackAttachment>();
             }
         }
 
@@ -110,7 +110,7 @@ namespace Microsoft.HockeyApp.Model
         {
             get
             {
-                return String.IsNullOrWhiteSpace(CreatedAt) ?  DateTime.Now : DateTime.Parse(CreatedAt);
+                return string.IsNullOrWhiteSpace(CreatedAt) ?  DateTime.Now : DateTime.Parse(CreatedAt);
             }
         }
 
@@ -164,48 +164,67 @@ namespace Microsoft.HockeyApp.Model
         /// <summary>
         /// via-flag as string
         /// </summary>
-        public string ViaAsString { get {
-            String retVal = "";
-            switch (this.Via)
+        public string ViaAsString
+        {
+            get
             {
-                case 1:
-                    retVal = "API";
-                    break;
-                case 2:
-                    retVal = "E-Mail";
-                    break;
-                case 3:
-                    retVal = "Web";
-                    break;
+                string retVal = "";
+                switch (Via)
+                {
+                    case 1:
+                        retVal = "API";
+                        break;
+                    case 2:
+                        retVal = "E-Mail";
+                        break;
+                    case 3:
+                        retVal = "Web";
+                        break;
+                }
+                return retVal;
             }
-            return retVal;
-        } }
+        }
 
         internal Dictionary<string, string> MessagePartsDict
         {
             get
             {
                 var partsDict = new Dictionary<string, string>();
-                if (!String.IsNullOrWhiteSpace(this.Text)) { partsDict.Add("text", this.Text.Replace("\r", "\n")); }
-                if (!String.IsNullOrWhiteSpace(this.Name)) { partsDict.Add("name", this.Name); }
-                if (!String.IsNullOrWhiteSpace(this.Email)) { partsDict.Add("email", this.Email); }
-                if (!String.IsNullOrWhiteSpace(this.Subject)) { partsDict.Add("subject", this.Subject); }
+                if (!string.IsNullOrWhiteSpace(Text)) { partsDict.Add("text", Text.Replace("\r", "\n")); }
+                if (!string.IsNullOrWhiteSpace(Name)) { partsDict.Add("name", Name); }
+                if (!string.IsNullOrWhiteSpace(Email)) { partsDict.Add("email", Email); }
+                if (!string.IsNullOrWhiteSpace(Subject)) { partsDict.Add("subject", Subject); }
 
-                if (!String.IsNullOrWhiteSpace(this.Token)) { partsDict.Add("token", this.Token); }
+                if (!string.IsNullOrWhiteSpace(Token)) { partsDict.Add("token", Token); }
 
-                if (!String.IsNullOrWhiteSpace(Oem)) { partsDict.Add("oem", Oem); }
-                if (!String.IsNullOrWhiteSpace(Model)) { partsDict.Add("model", Model); }
-                if (!String.IsNullOrWhiteSpace(OSVersion)) { partsDict.Add("os_version", this.OSVersion); }
+                if (!string.IsNullOrWhiteSpace(Oem)) { partsDict.Add("oem", Oem); }
+                if (!string.IsNullOrWhiteSpace(Model)) { partsDict.Add("model", Model); }
+                if (!string.IsNullOrWhiteSpace(OSVersion)) { partsDict.Add("os_version", OSVersion); }
 
                 //not used for feedback. if (HockeyClient.Instance.AppIdentifier != null) { partsDict.Add("bundle_identifier", HockeyClient.Instance.AppIdentifier); }
-                if (!String.IsNullOrWhiteSpace(HockeyClient.Current.AsInternal().VersionInfo)) { partsDict.Add("bundle_version", HockeyClient.Current.AsInternal().VersionInfo); }
+                if (!string.IsNullOrWhiteSpace(HockeyClient.Current.AsInternal().VersionInfo)) { partsDict.Add("bundle_version", HockeyClient.Current.AsInternal().VersionInfo); }
                 return partsDict;
             }
         }
 
         internal string SerializeToWwwForm()
         {
-            return MessagePartsDict.Select(e => e.Key + "=" + Uri.EscapeUriString(e.Value)).Aggregate((a, b) => a + "&" + b);
+            var partsDict = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(Text)) { partsDict.Add("text", Uri.EscapeUriString(Text.Replace("\r", "\n")).Replace("&", "%26")); }
+            if (!string.IsNullOrWhiteSpace(Name)) { partsDict.Add("name", Uri.EscapeUriString(Name)); }
+            if (!string.IsNullOrWhiteSpace(Email)) { partsDict.Add("email", Uri.EscapeUriString(Email)); }
+            if (!string.IsNullOrWhiteSpace(Subject)) { partsDict.Add("subject", Uri.EscapeUriString(Subject).Replace("&", "%26")); }
+
+            if (!string.IsNullOrWhiteSpace(Token)) { partsDict.Add("token", Uri.EscapeUriString(Token)); }
+
+            if (!string.IsNullOrWhiteSpace(Oem)) { partsDict.Add("oem", Uri.EscapeUriString(Oem)); }
+            if (!string.IsNullOrWhiteSpace(Model)) { partsDict.Add("model", Uri.EscapeUriString(Model)); }
+            if (!string.IsNullOrWhiteSpace(OSVersion)) { partsDict.Add("os_version", Uri.EscapeUriString(OSVersion)); }
+
+            //not used for feedback. if (HockeyClient.Instance.AppIdentifier != null) { partsDict.Add("bundle_identifier", HockeyClient.Instance.AppIdentifier); }
+            if (!string.IsNullOrWhiteSpace(HockeyClient.Current.AsInternal().VersionInfo)) { partsDict.Add("bundle_version", Uri.EscapeUriString(HockeyClient.Current.AsInternal().VersionInfo)); }
+
+            return partsDict.Select(e => e.Key + "=" + e.Value).Aggregate((a, b) => a + "&" + b);
         }
     }
 }

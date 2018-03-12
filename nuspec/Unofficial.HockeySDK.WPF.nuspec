@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Unofficial.HockeySDK.WPF</id>
+    <version>{BuildNumberVersion}</version>
+    <authors>MACK Mathieu</authors>
+    <owners>MACK Mathieu</owners>
+    <licenseUrl>https://github.com/mathieumack/HockeySDK-Windows/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/mathieumack/HockeySDK-Windows</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Unofficial HockeyApp SDK for WPF applications. Use HockeyApp to collect crash reports, feedback, and manage beta distribution. This package extend WPF to manage session datas</description>
+    <language>en-US</language>
+    <tags>HockeyApp; Windows; WPF; Crash reports; reporting; feedback; Telemetry; Analytics</tags>
+    <dependencies>
+      <dependency id="Unofficial.HockeySDK.Core" version="{BuildNumberVersion}" />
+    </dependencies>
+  </metadata>
+
+  <files>
+    <!-- HockeySDK -->
+    <file src="..\Src\Kit.Core45\bin\Release\Microsoft.HockeyApp.Core45.dll" target="lib\portable-net45+win8+wp8+wpa81+win81+uap10.0" />
+    <file src="..\Src\Kit.Core45\bin\Release\Microsoft.HockeyApp.Core45.XML" target="lib\portable-net45+win8+wp8+wpa81+win81+uap10.0" />
+
+    <!-- Application Insights -->
+    <file src="..\Src\Kit.WPF45\bin\Release\Microsoft.HockeyApp.Kit.dll" target="lib\net45" />
+    <file src="..\Src\Kit.WPF45\bin\Release\Microsoft.HockeyApp.Kit.XML" target="lib\net45" />
+  </files>
+</package>
